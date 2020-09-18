@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cnstock.dao.CompanyNewsDao">
+	
+	<resultMap  id="companyNewsMap" type="CompanyNews">
+		<id property="id" column="id" />
+		<result property="secucode" column="secucode"/>
+		<result property="secuabbr" column="secuabbr"/>
+		<result property="type" column="type"/>
+		<result property="question" column="question"/>
+		<result property="answer" column="answer"/>
+		<result property="source" column="source"/>
+		<result property="publishTime" column="publishTime"/>
+		<result property="qTime" column="qTime"/>
+		<result property="aTime" column="aTime"/>
+	</resultMap>
+	
+	<sql id="where">
+		<where>
+			<if test="params!=null">
+				<if test="params.id!=null and params.id!=''">
+					AND t.id=#{params.id}
+				</if>
+				<if test="params.secucode!=null and params.secucode!=''">
+					AND t.secucode=#{params.secucode}
+				</if>
+				<if test="params.type!=null and params.type!=''">
+					AND t.type=#{params.type}
+				</if>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectBy"  resultMap="companyNewsMap">
+	    SELECT
+			t.id,
+			t.secucode,
+			t.secuabbr,
+			t.type,
+			t.question,
+			t.answer,
+			t.source,
+			t.publishTime,
+			t.qTime,
+			t.aTime
+		FROM
+			tbl_news t
+		<include refid="where" />
+		ORDER BY t.secucode ASC
+		LIMIT #{page},#{size}
+	</select>
+	
+	<select id="selectCountBy"  resultType="int">
+	    SELECT
+			COUNT(1)
+		FROM
+			tbl_news t
+		<include refid="where" />
+	</select>
+	
+	<select id="selectById" resultMap="companyNewsMap">
+		SELECT
+			t.id,
+			t.secucode,
+			t.secuabbr,
+			t.type,
+			t.question,
+			t.answer,
+			t.source,
+			t.publishTime,
+			t.qTime,
+			t.aTime
+		FROM
+			tbl_news t
+		WHERE
+		    t.id=#{id}
+	</select>
+	
+	<insert id="save">
+	    INSERT INTO tbl_news ( 
+		    id,
+			secucode,
+			secuabbr,
+			type,
+			question,
+			answer,
+			source,
+			publishTime,
+			qTime,
+			aTime
+		)VALUES( 
+			#{id},
+			#{secucode},
+			#{secuabbr},
+			#{type},
+			#{question},
+			#{answer},
+			#{source},
+			#{publishTime},
+			#{qTime},
+			#{aTime}
+		)
+	</insert>
+	
+	<update id="updateById">
+		UPDATE tbl_news t SET 
+			t.secucode=#{secucode},
+			t.secuabbr=#{secuabbr},
+			t.type=#{type},
+			t.question=#{question},
+			t.answer=#{answer},
+			t.source=#{source},
+			t.publishTime=#{publishTime},
+			t.qTime=#{qTime},
+			t.aTime=#{aTime}
+		WHERE
+		  t.id=#{id}
+	</update>
+	
+</mapper>

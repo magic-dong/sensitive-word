@@ -1,0 +1,58 @@
+#server
+server:
+  port: 8080
+  context-path: /sensitive-word
+  max-http-header-size: 10240000
+  max-http-post-size: 10240000
+  
+#profile
+spring:
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  mvc:
+    servlet:
+      load-on-startup: 1 
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  #多个war包在同一tomcat下同时部署时，需不同jmx域
+  jmx:
+    #是否将管理bean暴露给JMX域，默认true
+    #方法一：enabled=false
+    enabled: false
+    #方法二：default-domain=唯一的名字
+    default-domain: sensitive-word
+              
+#Mybatis配置    
+mybatis:
+  type-aliases-package: com.cnstock
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  configLocation: classpath:mybatis-config.xml
+  
+#异步线程池配置
+asyncTask:
+  executor:
+     #核心线程数
+     corePoolSize: 50
+     #最大线程数
+     maxPoolSize: 400
+     #队列大小
+     queueCapacity: 100
+     #允许线程的空闲时间(单位：秒)
+     keepAliveSeconds: 60
+     #线程的名称前缀
+     threadNamePrefix: async-service-   
